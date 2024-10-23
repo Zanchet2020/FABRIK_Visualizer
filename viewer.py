@@ -51,7 +51,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 x, y = pygame.mouse.get_pos()
                 print(x, y)
-                body.reach(x, y)
+                body.interpolated_reach(x, y)
 
             DISPLAYSURF.fill(WHITE)
             DrawBody(body, DISPLAYSURF)
