@@ -1,0 +1,15 @@
+import math
+
+
+class Joint():
+
+
+
+class Connection():
+
+
+
+
+class Body():
+    joints = []
+    connections = []
