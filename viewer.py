@@ -39,9 +39,11 @@ DISPLAYSURF.fill(WHITE)
 pygame.display.set_caption("Game")
 
 points = [(SCREEN_WIDTH/2, SCREEN_HEIGHT * 1),
-          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.75),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.9),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.8),
           (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.5),
-          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.25)]
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.3),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.1)]
 
 body = Body(points)
 
@@ -71,7 +73,7 @@ def main():
                 x, y = pygame.mouse.get_pos()
                 #print(x, y)
 
-                t = 5
+                t = 200
                 start_x = body.joints[-1].x
                 start_y = body.joints[-1].y
                 start_time = time.time()
@@ -83,6 +85,7 @@ def main():
                     current_time = current_time if current_time < end_time else end_time
                     l = current_time / end_time
                     ls = smoothstep(l, 0, 1, N=2)
+                    print(l, ls)
                     #print(l, ls)
                     xi = ls * (x - start_x) + start_x
                     yi = ls * (y - start_y) + start_y
@@ -92,8 +95,6 @@ def main():
                     pygame.draw.circle(DISPLAYSURF, GREEN, pygame.Vector2(x, y), 5)
                     DrawBody(body, DISPLAYSURF)
                     pygame.display.flip()
-                    FramePerSec.tick(FPS)
-                    time.sleep(0.1)
                     #self.reach(x, y)
 
             DISPLAYSURF.fill(WHITE)
