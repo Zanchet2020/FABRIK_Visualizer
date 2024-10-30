@@ -2,6 +2,21 @@ import pygame
 from pygame.locals import *
 import sys
 from FABRIK import *
+import time
+import numpy as np
+from scipy.special import comb
+
+
+def smoothstep(x, x_min=0, x_max=1, N=1):
+    x = np.clip((x - x_min) / (x_max - x_min), 0, 1)
+
+    result = 0
+    for n in range(0, N + 1):
+         result += comb(N + n, n) * comb(2 * N + 1, N - n) * (-x) ** n
+
+    result *= x ** (N + 1)
+
+    return result
 
 pygame.init()
 
@@ -30,6 +45,10 @@ points = [(SCREEN_WIDTH/2, SCREEN_HEIGHT * 1),
 
 body = Body(points)
 
+
+
+
+
 def DrawBody(body: Body, screen):
     for joint in body.joints:
         #print(joint.x, joint.y)
@@ -50,8 +69,32 @@ def main():
                 continue
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 x, y = pygame.mouse.get_pos()
-                print(x, y)
-                body.interpolated_reach(x, y)
+                #print(x, y)
+
+                t = 5
+                start_x = body.joints[-1].x
+                start_y = body.joints[-1].y
+                start_time = time.time()
+                end_time = t
+                current_time = 0
+                
+                while current_time < end_time:
+                    current_time += time.time() - start_time
+                    current_time = current_time if current_time < end_time else end_time
+                    l = current_time / end_time
+                    ls = smoothstep(l, 0, 1, N=2)
+                    #print(l, ls)
+                    xi = ls * (x - start_x) + start_x
+                    yi = ls * (y - start_y) + start_y
+                    #print(xi, yi)
+                    body.reach(int(xi), int(yi), tol=10)
+                    DISPLAYSURF.fill(WHITE)
+                    pygame.draw.circle(DISPLAYSURF, GREEN, pygame.Vector2(x, y), 5)
+                    DrawBody(body, DISPLAYSURF)
+                    pygame.display.flip()
+                    FramePerSec.tick(FPS)
+                    time.sleep(0.1)
+                    #self.reach(x, y)
 
             DISPLAYSURF.fill(WHITE)
             DrawBody(body, DISPLAYSURF)

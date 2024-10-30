@@ -31,8 +31,22 @@ class Body:
             conn = Connection(i-1, i, d)
             self.connections.append(conn)
 
-    def interpolated_reach(self, x, y, t = 5):
-        self.reach(x, y)
+    # def interpolated_reach(self, x, y, pygame, screen, DrawBody, t = 5, speed = 1):
+    #     start_x = self.joints[-1].x
+    #     start_y = self.joints[-1].y
+    #     start_time = 0
+    #     end_time = start_time + t
+    #     current_time = 0
+    #     time_step = t / 10
+    #     while current_time < end_time:
+    #         current_time += time_step
+    #         l = current_time / t
+    #         xi = l * (x - start_x) + start_x
+    #         yi = l * (y - start_y) + start_y
+    #         print(xi, yi)
+    #         self.reach(xi, yi)
+    #         DrawBody(self, screen, pygame)
+    #     #self.reach(x, y)
     
     def reach(self, x, y, tol = 1):
         base = (self.joints[0].x, self.joints[0].y)
