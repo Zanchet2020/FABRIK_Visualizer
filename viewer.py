@@ -99,9 +99,7 @@ def main():
             #         DrawBody(body, DISPLAYSURF)
             #         pygame.display.flip()
             #         self.reach(x, y)
-        |
-        |
-        
+    
         DISPLAYSURF.fill(WHITE)
         x, y = pygame.mouse.get_pos()
         if x != prev_x and y != prev_y:
