@@ -31,7 +31,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
  
 # Screen information
-SCREEN_WIDTH = 1000
+SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 900
  
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -64,44 +64,55 @@ def DrawBody(body: Body, screen):
         
 def main():
     running = True
+    prev_x, prev_y = 0, 0
     while running:     
         for event in pygame.event.get():              
             if event.type == QUIT:
                 running = False
                 continue
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                x, y = pygame.mouse.get_pos()
-                #print(x, y)
+            # elif event.type == pygame.MOUSEMOTION and pygame.mouse.get_pressed()[0]:
+            #     x, y = pygame.mouse.get_pos()
+            #     body.reach(x, y, tol = 10)
+            #     print(x, y)
+            #     continue
 
-                t = 200
-                start_x = body.joints[-1].x
-                start_y = body.joints[-1].y
-                start_time = time.time()
-                end_time = t
-                current_time = 0
+            #     t = 200
+            #     start_x = body.joints[-1].x
+            #     start_y = body.joints[-1].y
+            #     start_time = time.time()
+            #     end_time = t
+            #     current_time = 0
                 
-                while current_time < end_time:
-                    current_time += time.time() - start_time
-                    current_time = current_time if current_time < end_time else end_time
-                    l = current_time / end_time
-                    ls = smoothstep(l, 0, 1, N=2)
-                    print(l, ls)
-                    #print(l, ls)
-                    xi = ls * (x - start_x) + start_x
-                    yi = ls * (y - start_y) + start_y
-                    #print(xi, yi)
-                    body.reach(int(xi), int(yi), tol=10)
-                    DISPLAYSURF.fill(WHITE)
-                    pygame.draw.circle(DISPLAYSURF, GREEN, pygame.Vector2(x, y), 5)
-                    DrawBody(body, DISPLAYSURF)
-                    pygame.display.flip()
-                    #self.reach(x, y)
-
-            DISPLAYSURF.fill(WHITE)
-            DrawBody(body, DISPLAYSURF)
+            #     while current_time < end_time:
+            #         current_time += time.time() - start_time
+            #         current_time = current_time if current_time < end_time else end_time
+            #         l = current_time / end_time
+            #         ls = smoothstep(l, 0, 1, N=2)
+            #         print(l, ls)
+            #         #print(l, ls)
+            #         xi = ls * (x - start_x) + start_x
+            #         yi = ls * (y - start_y) + start_y
+            #         #print(xi, yi)
+            #         body.reach(int(xi), int(yi), tol=10)
+            #         DISPLAYSURF.fill(WHITE)
+            #         pygame.draw.circle(DISPLAYSURF, GREEN, pygame.Vector2(x, y), 5)
+            #         DrawBody(body, DISPLAYSURF)
+            #         pygame.display.flip()
+            #         self.reach(x, y)
+        |
+        |
+        
+        DISPLAYSURF.fill(WHITE)
+        x, y = pygame.mouse.get_pos()
+        if x != prev_x and y != prev_y:
+            body.reach(x, y, tol = 1)
+            prev_x = x
+            prev_y = y
+        pygame.draw.circle(DISPLAYSURF, GREEN, pygame.Vector2(x, y), 10)
+        DrawBody(body, DISPLAYSURF)
             
-            pygame.display.flip()
-            FramePerSec.tick(FPS)
+        pygame.display.flip()
+        FramePerSec.tick(FPS)
     pygame.quit()
     sys.exit()
 
