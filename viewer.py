@@ -76,8 +76,12 @@ def main():
     follow_mouse = False
     edit_mode = False
     prev_x, prev_y = 0, 0
-    font = pygame.font.Font(pygame.font.get_default_font(), 36)
-    text_surface = font.render('Press E to toggle mouse following', True, (0, 0, 0))
+    font = pygame.font.Font(pygame.font.get_default_font(), 15)
+    mouse_follow_t = font.render('E = mouse following', True, (0, 0, 0))
+    trim_arm_t = font.render('T = trim arm', True, (0, 0, 0))
+    clear_all_t = font.render('C = clear all', True, (0, 0, 0))
+    new_joint_t = font.render('Left Click = new joint', True, (0, 0, 0))
+
     while running:     
         for event in pygame.event.get():              
             if event.type == QUIT:
@@ -128,8 +132,11 @@ def main():
                     
         DISPLAYSURF.fill(WHITE)
         # DISPLAY TEXT
-        DISPLAYSURF.blit(text_surface, dest=(0,0))
-
+        DISPLAYSURF.blit(mouse_follow_t, dest=(0,0))
+        DISPLAYSURF.blit(trim_arm_t, dest=(0,15))
+        DISPLAYSURF.blit(clear_all_t, dest=(0,30))
+        DISPLAYSURF.blit(new_joint_t, dest=(0,45))
+        
         # FOLLOW MOUSE ALL THE TIME
         x, y = pygame.mouse.get_pos()
         if follow_mouse and x != prev_x and y != prev_y:
