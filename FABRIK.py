@@ -16,42 +16,47 @@ class Connection:
 
 
 class Body:
-    def __init__(self, joints):
+    def __init__(self, jts):
         self.joints = []
         self.connections = []
-        for i in range(len(joints)):
-            joint = Joint(joints[i][0], joints[i][1])
+        for i in range(len(jts)):
+            joint = Joint(jts[i][0], jts[i][1])
             self.joints.append(joint)
             if i == 0:
-                self.origin = (joints[0][0], joints[0][1])
+                self.origin = joint
                 continue
-            dx = joints[i][0] - joints[i-1][0]
-            dy = joints[i][1] - joints[i-1][1]
+            dx = jts[i][0] - jts[i-1][0]
+            dy = jts[i][1] - jts[i-1][1]
             d = math.sqrt(dx * dx + dy * dy)
             conn = Connection(i-1, i, d)
             self.connections.append(conn)
 
-    # def interpolated_reach(self, x, y, pygame, screen, DrawBody, t = 5, speed = 1):
-    #     start_x = self.joints[-1].x
-    #     start_y = self.joints[-1].y
-    #     start_time = 0
-    #     end_time = start_time + t
-    #     current_time = 0
-    #     time_step = t / 10
-    #     while current_time < end_time:
-    #         current_time += time_step
-    #         l = current_time / t
-    #         xi = l * (x - start_x) + start_x
-    #         yi = l * (y - start_y) + start_y
-    #         print(xi, yi)
-    #         self.reach(xi, yi)
-    #         DrawBody(self, screen, pygame)
-    #     #self.reach(x, y)
-    
+    def delete_last(self):
+        if len(self.joints) > 1:
+            self.joints.pop()
+            self.connections.pop()
+
+    def clear_all(self):
+        while len(self.joints) > 1:
+            self.joints.pop()
+            self.connections.pop()
+
+    def add_joint(self, x, y):
+        joint = Joint(x, y)
+        self.joints.append(joint)
+        dx = self.joints[-2].x - x
+        dy = self.joints[-2].y - y
+        d = math.sqrt(dx * dx + dy * dy)
+        conn = Connection(len(self.joints) - 2, len(self.joints) - 1, d)
+        self.connections.append(conn)
+        print(len(self.joints))
+        print(self.joints.index(self.joints[-1]))
+        
+            
     def reach(self, x, y, tol = 1):
         base = (self.joints[0].x, self.joints[0].y)
-        dx = x - base[0]#self.origin[0]
-        dy = y - base[1]#self.origin[1]
+        dx = x - base[0]
+        dy = y - base[1]
         dist = math.sqrt(dx * dx + dy * dy)
         body_length = sum(c.distance for c in self.connections)
 

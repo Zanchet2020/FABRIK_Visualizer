@@ -39,16 +39,26 @@ DISPLAYSURF.fill(WHITE)
 pygame.display.set_caption("Game")
 
 points = [(SCREEN_WIDTH/2, SCREEN_HEIGHT * 1),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.95),
           (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.9),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.85),
           (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.8),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.75),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.7),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.65),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.6),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.55),
           (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.5),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.45),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.4),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.35),
           (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.3),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.25),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.2),
+          (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.15),
           (SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.1)]
 
 body = Body(points)
-
-
-
 
 
 def DrawBody(body: Body, screen):
@@ -61,9 +71,10 @@ def DrawBody(body: Body, screen):
         pygame.draw.line(screen, BLACK, startPos, endPos)
 
         
-def main():
+def main():    
     running = True
     follow_mouse = False
+    edit_mode = False
     prev_x, prev_y = 0, 0
     font = pygame.font.Font(pygame.font.get_default_font(), 36)
     text_surface = font.render('Press E to toggle mouse following', True, (0, 0, 0))
@@ -75,6 +86,19 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
                     follow_mouse = not follow_mouse
+
+                if event.key == pygame.K_t:
+                    body.delete_last()
+
+                if event.key == pygame.K_c:
+                    body.clear_all()
+
+
+            elif event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[2]:
+                x, y = pygame.mouse.get_pos()
+                body.add_joint(x, y)
+            
+            # IF FOLLOW_MOUSE IS NOT ACTIVATED
             elif not follow_mouse and event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:    
                 x, y = pygame.mouse.get_pos()
                 
@@ -89,7 +113,7 @@ def main():
                     current_time += time.time() - start_time
                     current_time = current_time if current_time < end_time else end_time
                     l = current_time / end_time
-                    ls = smoothstep(l, 0, 1, N=2)
+                    ls = smoothstep(l, 0, 1, N=3)
                     
                     xi = ls * (x - start_x) + start_x
                     yi = ls * (y - start_y) + start_y
@@ -97,15 +121,16 @@ def main():
                     body.reach(int(xi), int(yi), tol=3)
                     DISPLAYSURF.fill(WHITE)
                     DISPLAYSURF.blit(text_surface, dest=(0,0))
-                    pygame.draw.circle(DISPLAYSURF, GREEN, pygame.Vector2(x, y), 5)
+                    pygame.draw.circle(DISPLAYSURF, RED, pygame.Vector2(x, y), 10)
                     DrawBody(body, DISPLAYSURF)
                     pygame.display.flip()
-    
-        DISPLAYSURF.fill(WHITE)
 
-        # now print the text
+                    
+        DISPLAYSURF.fill(WHITE)
+        # DISPLAY TEXT
         DISPLAYSURF.blit(text_surface, dest=(0,0))
 
+        # FOLLOW MOUSE ALL THE TIME
         x, y = pygame.mouse.get_pos()
         if follow_mouse and x != prev_x and y != prev_y:
             body.reach(x, y, tol = 1)
