@@ -49,8 +49,6 @@ class Body:
         d = math.sqrt(dx * dx + dy * dy)
         conn = Connection(len(self.joints) - 2, len(self.joints) - 1, d)
         self.connections.append(conn)
-        print(len(self.joints))
-        print(self.joints.index(self.joints[-1]))
         
             
     def reach(self, x, y, tol = 1):

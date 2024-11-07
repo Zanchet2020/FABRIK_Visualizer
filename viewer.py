@@ -124,7 +124,10 @@ def main():
                     
                     body.reach(int(xi), int(yi), tol=3)
                     DISPLAYSURF.fill(WHITE)
-                    DISPLAYSURF.blit(text_surface, dest=(0,0))
+                    DISPLAYSURF.blit(mouse_follow_t, dest=(0,0))
+                    DISPLAYSURF.blit(trim_arm_t, dest=(0,15))
+                    DISPLAYSURF.blit(clear_all_t, dest=(0,30))
+                    DISPLAYSURF.blit(new_joint_t, dest=(0,45))
                     pygame.draw.circle(DISPLAYSURF, RED, pygame.Vector2(x, y), 10)
                     DrawBody(body, DISPLAYSURF)
                     pygame.display.flip()
